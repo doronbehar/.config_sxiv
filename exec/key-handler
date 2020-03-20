@@ -1,5 +1,12 @@
 #!/bin/sh
 
+# USES:
+# - zenity: https://gitlab.gnome.org/GNOME/zenity
+# - lf: https://github.com/gokcehan/lf
+# - OPTIONAL - for rotations
+#   * jpegtran: from libjpeg: http://libjpeg.sourceforge.net/
+#   * mogrify: from imagemagick: https://www.imagemagick.org/
+
 rotate() {
 	degree="$1"
 	tr '\n' '\0' | xargs -0 realpath | sort | uniq | while read file; do
