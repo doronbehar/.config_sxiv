@@ -11,6 +11,29 @@ rotate() {
 }
 
 case "$1" in
+	"Delete")
+		files_list=()
+		while IFS=$'\n' read file; do
+			files_list+=("$file")
+		done
+		selected_files=($(zenity --list \
+			--title "sxiv Delete Confirmation" \
+			--text "Selecting none will delete all" \
+			--column Files --width=700 --height=350 \
+			--multiple --separator=$'\n' "${files_list[@]}"))
+		# if zenity's dialog was canceled
+		if (( $? )); then
+			echo canceling
+			exit 1
+		fi
+		if [ ${#selected_files[@]} -lt 1 ]; then
+			# echo zenity didn\'t cancel but no files were selected, removing all
+			selected_files=("${files_list[@]}")
+		fi
+		for file in "${selected_files[@]}"; do
+			rm "$file"
+		done
+		;;
 	"C-x")
 		while read file; do
 			lf -remote "send select '$file'"
